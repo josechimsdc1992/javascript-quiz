@@ -5,9 +5,11 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
+    './node_modules/ts-standard/eslintrc.json'
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
+  parserOptions:{project:'./tsconfig.json'},
   plugins: ['react-refresh'],
   rules: {
     'react-refresh/only-export-components': [
