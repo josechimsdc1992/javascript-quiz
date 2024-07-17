@@ -1,7 +1,7 @@
 import { create } from "zustand"
 import { type Question } from "../types"
 import confetti from "canvas-confetti"
-import { persist } from "zustand/middleware"
+import { persist,devtools } from "zustand/middleware"
 interface State{
     questions:Question[]
     currentQuestion:number
@@ -11,8 +11,19 @@ interface State{
     goPreviousQuestion:()=>void,
     reset:()=>void
 }
-
+const logger=(config)=>(get,set,api)=>{
+    return config(
+        (...args)=>{
+            console.log(' applyng',args)
+            set( ...args )
+            console.log(' new state',get())
+        },
+        get,
+        api
+    )
+}
 export const useQuestionsStore=create<State>()(
+    devtools(
     persist(
         (set,get)=>{
             return{
@@ -23,7 +34,7 @@ export const useQuestionsStore=create<State>()(
                     const json=await res.json()
         
                     const questions=json.sort(()=>Math.random()-0.5).slice(0,limit)
-                    set({questions})
+                    set({questions},false,'FETCH-QUESTION')
                 },
                 selectAnswer:(questionid:number, answerindex:number)=> {
                     const {questions} =get()
@@ -63,5 +74,5 @@ export const useQuestionsStore=create<State>()(
             ,
     {name:'questions'}
     )
-    
+    )
 )
